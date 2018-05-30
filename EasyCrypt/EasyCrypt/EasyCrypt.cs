@@ -134,6 +134,7 @@ namespace EasyCrypt
                 }
 
             }
+            
             return plaintext;
 
         }
@@ -150,8 +151,17 @@ namespace EasyCrypt
 
             string fileInformation = File.ReadAllText(input);
             string b64result = EasyCrypt.DecryptString(fileInformation);
-            byte[] result = System.Convert.FromBase64String(b64result);
-            File.WriteAllBytes(output, result);
+            if (b64result.Substring(b64result.Length -2, 2) != "==")
+            {
+                byte[] result = System.Text.UTF8Encoding.UTF8.GetBytes(b64result);
+                File.WriteAllBytes(output, result);
+            }
+            else
+            {
+                byte[] result = System.Convert.FromBase64String(b64result);
+                File.WriteAllBytes(output, result);
+            }
+            
         }
     }
 }
